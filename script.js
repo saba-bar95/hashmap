@@ -27,8 +27,21 @@ class HashMap {
     const newArr = new Array(this.hashmap.length * 2);
     this.hashmap.forEach((el) => {
       if (!el) return;
-      console.log(el);
-      console.log(this.hashmap);
+      let currentNode = el;
+      while (currentNode) {
+        const hashCode = this.hash(currentNode.key, newArr.length);
+        if (newArr[hashCode]) {
+          let curr = newArr[hashCode];
+          while (curr.next !== null) {
+            curr = curr.next;
+          }
+          curr.next = new Node(currentNode.key, currentNode.value);
+        } else {
+          newArr[hashCode] = new Node(currentNode.key, currentNode.value);
+        }
+        currentNode = currentNode.next;
+      }
+      this.hashmap = newArr;
     });
   }
 
@@ -51,7 +64,6 @@ class HashMap {
       }
       currentNode.next = new Node(key, value);
       this.numItems++;
-      console.log(this.hashmap);
       this.resize();
       return;
     }
@@ -163,10 +175,3 @@ class HashMap {
   }
 }
 const hashmap = new HashMap();
-hashmap.set("firstname", "saba");
-hashmap.set("11", "barbakadze");
-hashmap.set("22", "11/30/1995");
-hashmap.set("222", "sss");
-hashmap.set("333", "sss");
-hashmap.set("lastname", "barbakadze");
-console.log(hashmap);
